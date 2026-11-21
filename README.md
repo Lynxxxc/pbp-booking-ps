@@ -33,7 +33,39 @@ php artisan key:generate
 php artisan serve
 ```
 
-Lalu isi variabel `DB_URI` di file `.env` dengan connection string MongoDB Atlas milik kelompok. Connection string dibagikan lewat grup kelompok, **bukan** lewat repo ini — file `.env` tidak pernah di-commit.
+## Menghubungkan Database (MongoDB Atlas)
+
+Database yang dipakai adalah MongoDB Atlas (cluster M0 gratis) dan dipakai bersama oleh kelompok. Laravel menyambung memakai paket `mongodb/laravel-mongodb` dan satu connection string di file `.env`.
+
+1. Pastikan ekstensi `mongodb` aktif di PHP yang dipakai — di Laragon proyek ini, yang terbukti punya adalah PHP 8.3.36. Cek dengan `php -m`, harus ada baris `mongodb`.
+2. Pasang paketnya (sekali per proyek): `composer require mongodb/laravel-mongodb`
+3. Koneksi `mongodb` di `config/database.php` membaca `'dsn' => env('DB_URI')` dan `'database' => env('DB_DATABASE', 'akademik')`.
+4. Isi file `.env`:
+
+```
+DB_CONNECTION=mongodb
+DB_URI=mongodb+srv://<username>:<password>@cluster0.v6ixbdn.mongodb.net/...
+```
+
+Connection string lengkap diambil dari Atlas (Database → Connect → Drivers) atau dari grup kelompok. Nama variabelnya **wajib `DB_URI`** — kalau tertulis `DB_URL`, Laravel tidak membacanya dan muncul error "requires dsn or host key" (bug yang kami alami dan perbaiki pada 21 November 2026).
+
+5. Bersihkan cache konfigurasi: `php artisan config:clear`
+6. Tes koneksi lewat `php artisan tinker`:
+
+```php
+$client = new MongoDB\Client(env('DB_URI'));
+$client->selectDatabase('admin')->command(['ping' => 1]);
+```
+
+Hasil yang benar: `ok => 1`.
+
+7. Cek visual: buka MongoDB Compass dengan connection string yang sama — database `akademik` harus terlihat.
+
+Error yang umum:
+
+- "requires dsn or host key" → `DB_URI` kosong atau salah nama variabel.
+- "bad auth" → username/password tidak cocok dengan Database User di Atlas.
+- Ekstensi tidak ditemukan → PHP yang dipakai bukan 8.3.36.
 
 ## Struktur Database
 
