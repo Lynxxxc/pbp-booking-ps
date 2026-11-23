@@ -85,7 +85,7 @@ return [
         'mongodb' => [
     'driver'   => 'mongodb',
     'dsn'      => env('DB_URI'),
-    'database' => env('DB_DATABASE', 'akademik'),
+    'database' => env('DB_DATABASE', 'rental_ps'),
 ],
 
         'pgsql' => [
