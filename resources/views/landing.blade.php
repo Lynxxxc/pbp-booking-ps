@@ -6,6 +6,14 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Afrian JMK48 PlayStation - Rental PS4 &amp; PS5</title>
 
+  <script>
+    // Terapkan tema tersimpan sebelum halaman digambar (biar tidak kedip)
+    try {
+      var savedTheme = localStorage.getItem('afrian-jmk48-theme');
+      if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    } catch (e) {}
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -13,7 +21,7 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
   <style>
-    body { background: radial-gradient(ellipse at 50% 0%, #3a0a22 0%, #12040b 55%, #090208 100%); }
+    body { background: radial-gradient(ellipse at 50% 0%, var(--bg-glow, #3a0a22) 0%, #12040b 55%, #090208 100%); }
   </style>
 </head>
 
@@ -72,7 +80,7 @@
       <span class="text-white">Rental</span>
       <span class="text-pink-300">PS4</span>
       <span class="text-white">&amp;</span>
-      <span class="text-pink-500 drop-shadow-[0_0_25px_rgba(255,45,135,.55)]">PS5</span>
+      <span class="text-pink-500 text-glow">PS5</span>
     </h1>
 
     <p class="mt-10 max-w-3xl text-xl leading-relaxed text-white/70 sm:text-2xl">
@@ -152,12 +160,12 @@
           @if ($unit->status === 'available')
             @guest
               <a href="{{ route('login') }}" data-goto
-                 class="mt-5 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-[#ff2d87] to-[#e11d6a] px-5 py-3 font-bold text-white shadow-[0_0_25px_rgba(255,45,135,0.35)] transition hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.99]">
+                 class="mt-5 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-pink-500 to-pink-600 px-5 py-3 font-bold text-white shadow-lg shadow-pink-600/40 transition hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.99]">
                 Pesan Unit Ini
               </a>
             @else
               <a href="{{ route(auth()->user()->role === 'admin' ? 'dashboard.admin' : (auth()->user()->role === 'pegawai' ? 'dashboard.pegawai' : 'dashboard.pengguna')) }}"
-                 class="mt-5 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-[#ff2d87] to-[#e11d6a] px-5 py-3 font-bold text-white shadow-[0_0_25px_rgba(255,45,135,0.35)] transition hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.99]">
+                 class="mt-5 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-pink-500 to-pink-600 px-5 py-3 font-bold text-white shadow-lg shadow-pink-600/40 transition hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.99]">
                 Pesan Unit Ini
               </a>
             @endguest
@@ -246,6 +254,52 @@
         setTimeout(() => (window.location.href = a.href), 600);
       });
     });
+  </script>
+
+  <!-- Pemilih tema warna -->
+  <div class="fixed bottom-5 right-5 z-[90] flex items-center gap-2 rounded-full border border-white/15 bg-black/50 px-4 py-2.5 shadow-2xl backdrop-blur-xl">
+    <span class="text-[11px] font-bold uppercase tracking-widest text-white/60">Tema</span>
+    <button type="button" data-set-theme="pink" title="Pink" aria-label="Tema Pink" class="theme-dot h-6 w-6 rounded-full border border-white/40 transition hover:scale-110" style="background:#ff2d87"></button>
+    <button type="button" data-set-theme="ungu" title="Ungu" aria-label="Tema Ungu" class="theme-dot h-6 w-6 rounded-full border border-white/40 transition hover:scale-110" style="background:#8b2dff"></button>
+    <button type="button" data-set-theme="biru" title="Biru" aria-label="Tema Biru" class="theme-dot h-6 w-6 rounded-full border border-white/40 transition hover:scale-110" style="background:#2d7dff"></button>
+    <button type="button" data-set-theme="hijau" title="Hijau" aria-label="Tema Hijau" class="theme-dot h-6 w-6 rounded-full border border-white/40 transition hover:scale-110" style="background:#2dff6a"></button>
+    <button type="button" data-set-theme="oranye" title="Oranye" aria-label="Tema Oranye" class="theme-dot h-6 w-6 rounded-full border border-white/40 transition hover:scale-110" style="background:#ff6a1a"></button>
+    <button type="button" data-set-theme="emas" title="Emas" aria-label="Tema Emas" class="theme-dot h-6 w-6 rounded-full border border-white/40 transition hover:scale-110" style="background:#d99e13"></button>
+    <button type="button" data-set-theme="silver" title="Silver" aria-label="Tema Silver" class="theme-dot h-6 w-6 rounded-full border border-white/40 transition hover:scale-110" style="background:#8b9bb3"></button>
+  </div>
+
+  <script>
+    // Pemilih tema: mengganti variabel warna pink-* lewat atribut data-theme di <html>
+    (function () {
+      const KEY = 'afrian-jmk48-theme';
+      const rootEl = document.documentElement;
+      const dots = document.querySelectorAll('[data-set-theme]');
+      const markActive = () => {
+        const cur = rootEl.getAttribute('data-theme') || 'pink';
+        dots.forEach((b) => {
+          const on = b.getAttribute('data-set-theme') === cur;
+          b.classList.toggle('ring-2', on);
+          b.classList.toggle('ring-white', on);
+          b.classList.toggle('scale-110', on);
+        });
+      };
+      dots.forEach((b) => {
+        b.addEventListener('click', () => {
+          const t = b.getAttribute('data-set-theme');
+          try {
+            if (t === 'pink') {
+              rootEl.removeAttribute('data-theme');
+              localStorage.removeItem(KEY);
+            } else {
+              rootEl.setAttribute('data-theme', t);
+              localStorage.setItem(KEY, t);
+            }
+          } catch (e) {}
+          markActive();
+        });
+      });
+      markActive();
+    })();
   </script>
 </body>
 </html>

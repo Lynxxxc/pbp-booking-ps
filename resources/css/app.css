@@ -65,3 +65,104 @@
         opacity: 1;
     }
 }
+
+/* ===== Tema warna landing (diubah lewat pemilih tema di halaman) =====
+   Semua kelas pink-* di landing membaca variabel --color-pink-*,
+   jadi mengganti variabel di bawah otomatis mewarnai ulang seluruh halaman. */
+:root {
+    --bg-glow: #3a0a22;
+}
+
+.text-glow {
+    filter: drop-shadow(0 0 25px color-mix(in srgb, var(--color-pink-500) 55%, transparent));
+}
+
+[data-theme='ungu'] {
+    --color-pink-50: #f5f0ff;
+    --color-pink-100: #ede4ff;
+    --color-pink-200: #dcc9ff;
+    --color-pink-300: #c0a3ff;
+    --color-pink-400: #a366ff;
+    --color-pink-500: #8b2dff;
+    --color-pink-600: #7a1de0;
+    --color-pink-700: #6613be;
+    --color-pink-800: #53139d;
+    --color-pink-900: #471582;
+    --color-pink-950: #1e062e;
+    --bg-glow: #2b0a3d;
+}
+
+[data-theme='biru'] {
+    --color-pink-50: #eff7ff;
+    --color-pink-100: #e0efff;
+    --color-pink-200: #c9dfff;
+    --color-pink-300: #a3c8ff;
+    --color-pink-400: #669eff;
+    --color-pink-500: #2d7dff;
+    --color-pink-600: #1d5fe1;
+    --color-pink-700: #1257be;
+    --color-pink-800: #13499d;
+    --color-pink-900: #154183;
+    --color-pink-950: #06142a;
+    --bg-glow: #0a243d;
+}
+
+[data-theme='hijau'] {
+    --color-pink-50: #effdf3;
+    --color-pink-100: #e0fde7;
+    --color-pink-200: #c9ffd6;
+    --color-pink-300: #a3ffb9;
+    --color-pink-400: #66ff8f;
+    --color-pink-500: #2dff6a;
+    --color-pink-600: #1de05a;
+    --color-pink-700: #13be49;
+    --color-pink-800: #139d3d;
+    --color-pink-900: #158238;
+    --color-pink-950: #062a12;
+    --bg-glow: #0a3d1f;
+}
+
+[data-theme='oranye'] {
+    --color-pink-50: #fff6ed;
+    --color-pink-100: #ffedd4;
+    --color-pink-200: #ffdca8;
+    --color-pink-300: #ffc270;
+    --color-pink-400: #ff8a3d;
+    --color-pink-500: #ff6a1a;
+    --color-pink-600: #e04e0c;
+    --color-pink-700: #ba3a0e;
+    --color-pink-800: #95300f;
+    --color-pink-900: #7a2a0f;
+    --color-pink-950: #2e1206;
+    --bg-glow: #3d1e0a;
+}
+
+[data-theme='emas'] {
+    --color-pink-50: #fdf9eb;
+    --color-pink-100: #faf0c9;
+    --color-pink-200: #f5e08f;
+    --color-pink-300: #f0ca4d;
+    --color-pink-400: #e6b325;
+    --color-pink-500: #d99e13;
+    --color-pink-600: #b97e0c;
+    --color-pink-700: #944f0e;
+    --color-pink-800: #7c4211;
+    --color-pink-900: #6a3812;
+    --color-pink-950: #2e1c04;
+    --bg-glow: #3a2a06;
+}
+
+[data-theme='silver'] {
+    --color-pink-50: #f8fafc;
+    --color-pink-100: #eef1f5;
+    --color-pink-200: #dde4ea;
+    --color-pink-300: #c4cedb;
+    --color-pink-400: #a5b2c4;
+    --color-pink-500: #8b9bb3;
+    --color-pink-600: #6d7d94;
+    --color-pink-700: #57657a;
+    --color-pink-800: #434e5e;
+    --color-pink-900: #343c47;
+    --color-pink-950: #14181d;
+    --bg-glow: #22262b;
+}
