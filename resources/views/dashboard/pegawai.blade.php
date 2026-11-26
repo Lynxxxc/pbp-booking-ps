@@ -18,7 +18,7 @@
         {{-- HEADER --}}
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.35em] text-pink-300">Afrian JMK48 PlayStation</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.35em] text-pink-300">Save Point PlayStation</p>
                 <h1 class="mt-1 text-3xl font-extrabold text-white">Dashboard Pegawai</h1>
                 <p class="mt-1 text-sm text-slate-400">
                     Halo, {{ auth()->user()->name ?? 'Pegawai' }} &middot; {{ now()->translatedFormat('l, d F Y') }}
@@ -105,7 +105,7 @@
 
                                     @if (Route::has('pegawai.orders.deliver'))
                                         <form method="POST" action="{{ route('pegawai.orders.deliver', $order) }}"
-                                              onsubmit="return confirm('Tandai unit sudah diantar ke {{ e($order->nama) }}?')">
+                                              data-confirm="Tandai unit sudah diantar ke {{ e($order->nama) }}?">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit"
@@ -144,7 +144,7 @@
                                        class="rounded-lg border border-pink-300/30 px-3 py-2 text-xs font-semibold text-pink-200 transition hover:bg-pink-300/10">Buka Peta</a>
                                     @if (Route::has('pegawai.orders.return'))
                                         <form method="POST" action="{{ route('pegawai.orders.return', $order) }}"
-                                              onsubmit="return confirm('Tandai {{ e($order->unit) }} sudah dikembalikan?')">
+                                              data-confirm="Tandai {{ e($order->unit) }} sudah dikembalikan?">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit"
@@ -189,3 +189,11 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+<script>
+    // AFRIAN_AUTO_REFRESH: halaman dimuat ulang otomatis tiap 5 detik (hanya saat tab terlihat)
+    setInterval(function () {
+        if (!document.hidden) { location.reload(); }
+    }, 5000);
+</script>
+@endpush

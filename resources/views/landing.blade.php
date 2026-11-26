@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Afrian JMK48 PlayStation - Rental PS4 &amp; PS5</title>
+  <title>Save Point PlayStation - Rental PS4 &amp; PS5</title>
 
   <script>
     // Terapkan tema tersimpan sebelum halaman digambar (biar tidak kedip)
@@ -47,7 +47,7 @@
     <nav class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-6 md:flex-row">
 
       <a href="{{ route('home') }}" class="text-center leading-tight md:text-left">
-        <div class="font-display text-3xl font-bold uppercase tracking-wide text-pink-300">Afrian JMK48</div>
+        <div class="font-display text-3xl font-bold uppercase tracking-wide text-pink-300">Save Point</div>
         <div class="text-[11px] font-semibold uppercase tracking-[0.45em] text-pink-100/90">PlayStation</div>
       </a>
 
@@ -124,7 +124,7 @@
       Tentang <span class="text-pink-400">Kami</span>
     </h2>
     <p class="mx-auto mt-6 max-w-3xl text-center text-lg leading-relaxed text-white/70">
-      Afrian JMK48 PlayStation adalah layanan rental PlayStation per jam. Kamu bisa memainkan PS4 dan PS5
+      Save Point PlayStation adalah layanan rental PlayStation per jam. Kamu bisa memainkan PS4 dan PS5
       tanpa harus membeli konsolnya — cukup pilih unit yang tersedia, tentukan jadwal, dan datang untuk bermain.
       Koleksi game lengkap, kondisi unit prima, dan harga bersahabat per jamnya.
     </p>
@@ -164,10 +164,17 @@
                 Pesan Unit Ini
               </a>
             @else
-              <a href="{{ route(auth()->user()->role === 'admin' ? 'dashboard.admin' : (auth()->user()->role === 'pegawai' ? 'dashboard.pegawai' : 'dashboard.pengguna')) }}"
-                 class="mt-5 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-pink-500 to-pink-600 px-5 py-3 font-bold text-white shadow-lg shadow-pink-600/40 transition hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.99]">
-                Pesan Unit Ini
-              </a>
+              @if (auth()->user()->role === 'pengguna')
+                <a href="{{ route('booking.create', $unit) }}" data-goto
+                   class="mt-5 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-pink-500 to-pink-600 px-5 py-3 font-bold text-white shadow-lg shadow-pink-600/40 transition hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.99]">
+                  Pesan Unit Ini
+                </a>
+              @else
+                <a href="{{ route(auth()->user()->role === 'admin' ? 'dashboard.admin' : 'dashboard.pegawai') }}"
+                   class="mt-5 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-pink-500 to-pink-600 px-5 py-3 font-bold text-white shadow-lg shadow-pink-600/40 transition hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.99]">
+                  Pesan Unit Ini
+                </a>
+              @endif
             @endguest
           @else
             <button type="button" disabled
@@ -212,9 +219,9 @@
   </section>
 
   <footer class="relative z-10 border-t border-pink-300/10 py-8 text-center">
-    <div class="font-display text-xl font-bold uppercase tracking-wide text-pink-300">Afrian JMK48</div>
+    <div class="font-display text-xl font-bold uppercase tracking-wide text-pink-300">Save Point</div>
     <div class="text-[10px] font-semibold uppercase tracking-[0.45em] text-pink-100/70">PlayStation</div>
-    <p class="mt-3 text-sm text-white/40">© 2026 Afrian JMK48 PlayStation — Rental PS4 &amp; PS5 per jam.</p>
+    <p class="mt-3 text-sm text-white/40">© 2026 Save Point PlayStation — Rental PS4 &amp; PS5 per jam.</p>
   </footer>
 
   <script>
@@ -231,11 +238,16 @@
 
     const loader = document.getElementById('loader');
     const loaderText = document.getElementById('loader-text');
+    // Splash loader hanya tampil di kunjungan pertama per sesi; kunjungan
+    // berikutnya (termasuk auto-refresh) langsung tampil tanpa loader.
+    const splashSeen = sessionStorage.getItem('spp-splash') === '1';
+    if (splashSeen) loader.classList.add('hidden');
     const hideLoader = () => {
       loader.classList.add('opacity-0', 'pointer-events-none');
       setTimeout(() => loader.classList.add('hidden'), 500);
     };
     const showLoader = (t = 'MEMUAT...') => {
+      if (splashSeen) return;
       loaderText.textContent = t;
       loader.classList.remove('hidden');
       requestAnimationFrame(() => loader.classList.remove('opacity-0', 'pointer-events-none'));
@@ -243,7 +255,8 @@
     window.showLoader = showLoader;
     const t0 = performance.now();
     window.addEventListener('load', () => {
-      setTimeout(hideLoader, Math.max(0, 1200 - (performance.now() - t0)));
+      if (splashSeen) return;
+      setTimeout(() => { hideLoader(); sessionStorage.setItem('spp-splash', '1'); }, Math.max(0, 1200 - (performance.now() - t0)));
     });
     window.addEventListener('pageshow', (e) => { if (e.persisted) hideLoader(); });
 
@@ -251,7 +264,7 @@
       a.addEventListener('click', (e) => {
         e.preventDefault();
         showLoader('MEMUAT...');
-        setTimeout(() => (window.location.href = a.href), 600);
+        setTimeout(() => (window.location.href = a.href), splashSeen ? 0 : 600);
       });
     });
   </script>
@@ -299,6 +312,25 @@
         });
       });
       markActive();
+    })();
+  </script>
+  <script>
+    // AFRIAN_AUTO_REFRESH: ketersediaan unit dimuat ulang otomatis tiap 5 detik (hanya saat tab terlihat), posisi scroll dijaga
+    (function () {
+      var KEY = 'afrianLandingScrollY';
+      var y = sessionStorage.getItem(KEY);
+      if (y !== null) {
+        var restore = function () { window.scrollTo(0, parseInt(y, 10)); };
+        restore();
+        window.addEventListener('load', restore);
+        sessionStorage.removeItem(KEY);
+      }
+      setInterval(function () {
+        if (!document.hidden) {
+          sessionStorage.setItem(KEY, String(window.scrollY));
+          location.reload();
+        }
+      }, 5000);
     })();
   </script>
 </body>

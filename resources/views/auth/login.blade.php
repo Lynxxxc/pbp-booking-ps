@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Login - Afrian JMK48 PlayStation')
+@section('title', 'Login - Save Point PlayStation')
 
 @section('content')
 <section class="mx-auto max-w-md px-4 py-12">
@@ -13,7 +13,7 @@
     <div class="rounded-3xl border border-pink-300/15 bg-[#1b0812]/80 p-8 shadow-2xl shadow-black/60 backdrop-blur-xl">
         <div class="text-center">
             <div class="font-display text-4xl font-bold uppercase tracking-wide text-pink-300">
-                AFRIAN JMK48
+                SAVE POINT
             </div>
             <div class="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.45em] text-pink-100/85">
                 PLAYSTATION

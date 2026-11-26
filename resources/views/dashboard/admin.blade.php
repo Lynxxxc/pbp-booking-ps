@@ -30,7 +30,7 @@
         {{-- ============ HEADER ============ --}}
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.35em] text-pink-300">Afrian JMK48 PlayStation</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.35em] text-pink-300">Save Point PlayStation</p>
                 <h1 class="mt-1 text-3xl font-extrabold text-white">Dashboard Admin</h1>
                 <p class="mt-1 text-sm text-slate-400">
                     Halo, {{ auth()->user()->name ?? 'Admin' }}. Ringkasan penyewaan hari ini.
@@ -120,10 +120,12 @@
                                     </td>
                                     <td class="px-5 py-3.5 text-right">
                                         <div class="flex justify-end gap-2">
-                                            <a href="https://wa.me/{{ preg_replace('/^0/', '62', preg_replace('/\D/', '', $order->wa)) }}" target="_blank"
-                                               class="rounded-lg border border-pink-300/30 px-3 py-1.5 text-xs font-semibold text-pink-200 transition hover:bg-pink-300/10">
-                                                WhatsApp
-                                            </a>
+                                            @if (!empty($order->wa))
+                                                <a href="https://wa.me/{{ preg_replace('/^0/', '62', preg_replace('/\D/', '', $order->wa)) }}" target="_blank"
+                                                   class="rounded-lg border border-pink-300/30 px-3 py-1.5 text-xs font-semibold text-pink-200 transition hover:bg-pink-300/10">
+                                                    WhatsApp
+                                                </a>
+                                            @endif
                                             @if (Route::has('admin.orders.show'))
                                                 <a href="{{ route('admin.orders.show', $order) }}"
                                                    class="rounded-lg bg-pink-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-pink-400">
@@ -197,3 +199,11 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+<script>
+    // AFRIAN_AUTO_REFRESH: halaman dimuat ulang otomatis tiap 5 detik (hanya saat tab terlihat)
+    setInterval(function () {
+        if (!document.hidden) { location.reload(); }
+    }, 5000);
+</script>
+@endpush

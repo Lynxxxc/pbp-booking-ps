@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Akun - Afrian JMK48 PlayStation')
+@section('title', 'Daftar Akun - Save Point PlayStation')
 
 @section('content')
 <section class="mx-auto max-w-md px-4 py-12">
@@ -13,7 +13,7 @@
     <div class="rounded-3xl border border-pink-300/15 bg-[#1b0812]/80 p-8 shadow-2xl shadow-black/60 backdrop-blur-xl">
         <div class="text-center">
             <div class="font-display text-4xl font-bold uppercase tracking-wide text-pink-300">
-                AFRIAN JMK48
+                SAVE POINT
             </div>
             <div class="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.45em] text-pink-100/85">
                 PLAYSTATION
@@ -64,6 +64,18 @@
                        autocomplete="email"
                        placeholder="Contoh: email@gmail.com"
                        class="mt-2 w-full rounded-xl border border-white/10 bg-[#26121c] px-4 py-3 text-sm text-white placeholder-white/35 transition focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-400/25">
+            </div>
+
+            <div>
+                <label for="phone" class="block text-sm font-semibold text-white">Nomor HP / WhatsApp <span class="font-normal text-white/45">(opsional)</span></label>
+                <input id="phone"
+                       name="phone"
+                       type="tel"
+                       value="{{ old('phone') }}"
+                       autocomplete="tel"
+                       placeholder="Contoh: 0812xxxxxxx"
+                       class="mt-2 w-full rounded-xl border border-white/10 bg-[#26121c] px-4 py-3 text-sm text-white placeholder-white/35 transition focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-400/25">
+                <p class="mt-1 text-xs text-white/45">Dipakai untuk pemberitahuan status booking kamu.</p>
             </div>
 
             <div>

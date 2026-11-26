@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -23,6 +24,7 @@ class AuthController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:100'],
+            'phone' => ['nullable', 'string', 'max:20', 'regex:/^[0-9+\-\s]+$/'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -35,6 +37,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'phone' => $data['phone'] ?? null,
             'password' => $data['password'],
             'role' => 'pengguna',
             'poin' => 0,
@@ -61,6 +64,25 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return redirect()->intended($this->dashboardUrl(Auth::user()));
+    }
+
+    public function guestLogin(Request $request)
+    {
+        $user = User::firstOrCreate(
+            ['email' => 'tamu@afrianjmk48.local'],
+            [
+                'name' => 'Tamu',
+                'password' => Str::random(32),
+                'role' => 'pengguna',
+                'poin' => 0,
+            ]
+        );
+
+        Auth::login($user);
+
+        $request->session()->regenerate();
+
+        return redirect()->route('dashboard.pengguna');
     }
 
     public function logout(Request $request)
